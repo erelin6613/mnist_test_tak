@@ -10,10 +10,10 @@ loss_fn = nn.BCELoss() if NUM_CLASSES == 1 else nn.CrossEntropyLoss()
 
 
 class BaseModel(nn.Module):
-	def train_step(self, batch):
+	def train_step(self, batch, device="cpu"):
 		images, targets = batch 
-		out = self(images)
-		loss = loss_fn(out, targets.view(-1, 1).float())
+		out = self(images.to(device))
+		loss = loss_fn(out.to(device), targets.to(device).view(-1, 1).float())
 		return out, loss
 
 	def validation_step(self):
